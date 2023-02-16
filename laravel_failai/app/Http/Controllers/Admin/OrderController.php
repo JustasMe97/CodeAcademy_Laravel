@@ -11,6 +11,7 @@ class OrderController extends Controller
 {
     public function __construct(protected OrderManager $manager)
     {
+        $this->authorizeResource(Order::class);
     }
     public function index()
     {

@@ -6,12 +6,20 @@ use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class UserManager
 {
     public function createUser(UserRequest $request): User
     {
-        $user = User::create($request->all());
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = $request->password;
+        if (Auth::user()->role === User::ROLE_ADMIN){
+            $user->role = $request->role;
+        }
+        $user->save();
         return $user;
     }
 
@@ -23,7 +31,18 @@ class UserManager
 
     public function updateUser(UserUpdateRequest $request, User $user): User
     {
-        $user->update($request->all());
+        $data = $request->all();
+        if ($request->password === null){
+            unset($data['password']);
+        }
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        if (Auth::user()->role === User::ROLE_ADMIN){
+            $user->role = $request->role;
+        }
+        $user->save();
+
         return $user;
     }
 

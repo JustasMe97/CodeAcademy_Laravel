@@ -13,6 +13,7 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Email</th>
+                    <th>Role</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -22,6 +23,7 @@
                         <td>{{$user->id}}</td>
                         <td>{{$user->name}}</td>
                         <td>{{$user->email}}</td>
+                        <td>{{$user->role}}</td>
                         <td>
                             <a href="{{route('users.edit', $user->id)}}" class="btn blue darken-4 me-5">Edit</a>
                             <form action="{{route('users.destroy', $user->id)}}" method="post">

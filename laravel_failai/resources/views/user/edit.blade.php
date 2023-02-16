@@ -23,6 +23,11 @@
 {{--               placeholder="Password"--}}
 {{--               class="@error('password') is-invalid @enderror"--}}
 {{--               value="{{old('password') ?? $user->password}}"><br>--}}
+        <input type="text"
+               name="role"
+               placeholder="Role"
+               class="@error('role') is-invalid @enderror"
+               value="{{old('role') ?? $user->role}}"><br>
         <hr>
         <input type="submit" class="waves-effect waves-light btn blue darken-4" value="Update">
         @csrf
