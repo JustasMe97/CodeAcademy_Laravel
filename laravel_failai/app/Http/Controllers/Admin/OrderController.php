@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\OrderCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderRequest;
 use App\Managers\OrderManager;
@@ -13,9 +14,10 @@ class OrderController extends Controller
     {
         $this->authorizeResource(Order::class);
     }
+
     public function index()
     {
-        $orders=$this->manager->getOrders();
+        $orders = $this->manager->getOrders();
         return view('order.index', compact('orders'));
     }
 
@@ -26,7 +28,10 @@ class OrderController extends Controller
 
     public function store(OrderRequest $request)
     {
-        $order=$this->manager->createOrder($request);
+        $order = $this->manager->createOrder($request);
+
+        $this->dispatch(new OrderCreated($order));
+
         return redirect()->route('orders.show', $order);
     }
 
@@ -42,7 +47,7 @@ class OrderController extends Controller
 
     public function update(OrderRequest $request, Order $order)
     {
-        $order=$this->manager->updateOrder($request,$order);
+        $order = $this->manager->updateOrder($request, $order);
         return redirect()->route('orders.show', $order);
     }
 

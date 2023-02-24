@@ -22,7 +22,7 @@
 </head>
 <body>
 {{--<img src="{{asset('/img/kalnas.jpg')}}" class="full_fit" alt="">--}}
-<div class="main_grid">
+<div class="main_grid bg-secondary bg-gradient">
     @include('layouts.admin.headerNew')
     <div class="container">
         @if ($errors->any())

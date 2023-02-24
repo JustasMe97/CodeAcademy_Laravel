@@ -13,7 +13,7 @@ class OrderManager
     {
         $order = Order::create($request->all()
             + [
-                'status_id' => Status::query()->where(['type' => 'order', 'name' => 'Naujas'])->first()->id,
+                'status_id' => Status::query()->where(['type' => 'order', 'name' => 'new'])->first()->id,
             ]);
 
         return $order;

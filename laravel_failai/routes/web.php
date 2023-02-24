@@ -9,29 +9,43 @@ use App\Http\Controllers\Admin\PersonController;
 use App\Http\Controllers\Admin\ProductsController;
 use App\Http\Controllers\Admin\StatusController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CartController;
+
+//use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Middleware\IsPersonnel;
 use App\Http\Middleware\SetLocale;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 
-Route::group(['middleware' => SetLocale::class], function () {
-    Route::get('/', HomeController::class);
-    //Route::get('/product/{product:slug}', [ProductController::class, 'show'])->name('product.show');
-    //Route::get('/category/{category:slug}', [CategoryController::class, 'show'])->name('category.show');
 
-    Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'verified']], function () {
+
+Route::group(['middleware' => SetLocale::class], function () {
+    Route::get('/', HomeController::class)->name('home');
+    Route::get('/product/{product:slug}', [ProductController::class, 'show'])->name('product.show');
+    //Route::get('/category/{category:slug}', [CategoryController::class, 'show'])->name('category.show');
+//    Route::get('cart/summary', [CartController::class, 'index'])->name('cart.summary');
+//    Route::delete('cart/destroy', [CartController::class, 'destroy'])->name('cart.delete_from_cart');
+    Route::group(['middleware' => ['auth','verified']], function () {
+        Route::post('product/add', [CartController::class, 'create'])->name('product.add_to_cart');
+        Route::resources([
+            'cart' => CartController::class,
+
+        ]);
+    });
+
+    Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'verified', IsPersonnel::class]], function () {
         Route::get('/', DashBoardController::class)->name('dashboard');
         Route::delete('/product/file/{file}', [ProductsController::class, 'destroyFile'])->name('product.destroy-file');
         Route::resources([
-            'products'     => ProductsController::class,
-            'categories'   => CategoriesController::class,
-            'orders'       => OrderController::class,
-            'statuses'     => StatusController::class,
-            'addresses'    => AddressController::class,
-            'users'        => UserController::class,
-            'persons'      => PersonController::class,
+            'products' => ProductsController::class,
+            'categories' => CategoriesController::class,
+            'orders' => OrderController::class,
+            'statuses' => StatusController::class,
+            'addresses' => AddressController::class,
+            'users' => UserController::class,
+            'persons' => PersonController::class,
             'paymentTypes' => PaymentTypeController::class,
         ]);
     });
